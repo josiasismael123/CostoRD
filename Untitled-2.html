@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CostoRD - Descubre cuánto cuesta vivir en RD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0D6EFD;
+            --secondary: #198754;
+            --bg: #F8F9FA;
+            --text: #212529;
+            --border: #E9ECEF;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-text: #f1f5f9;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        body.dark {
+            background: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        body.dark nav {
+            background: var(--dark-card);
+            border-color: rgba(100, 116, 139, 0.3);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links button:hover {
+            color: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0a58ca;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;}
+
+        /* PÁGINA */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        body.dark .hero p {
+            color: #cbd5e1;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        /* GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .grid.grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        /* CARD */
+        .card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        body.dark .card {
+            background: var(--dark-card);
+            border-color: rgba(100, 116, 139, 0.3);
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .card .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .card .stats {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        body.dark .card .stats {
+            color: #cbd5e1;
+        }
+
+        /* FORM */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        body.dark .form-group input,
+        body.dark .form-group textarea,
+        body.dark .form-group select {
+            background: var(--dark-card);
+            color: var(--dark-text);
+            border-color: rgba(100, 116, 139, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        /* MODAL */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        body.dark .modal-content {
+            background: var(--dark-card);
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        /* FILTERS */
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        body.dark .filter-btn {
+            background: var(--dark-card);
+            border-color: rgba(100, 116, 139, 0.3);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #f8f9fa;
+            border-top: 1px solid var(--border);
+            padding: 3rem 0;
+            margin-top: 4rem;
+        }
+
+        body.dark footer {
+            background: var(--dark-card);
+            border-color: rgba(100, 116, 139, 0.3);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-grid h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-grid ul {
+            list-style: none;
+        }
+
+        .footer-grid ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-grid a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-grid a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            text-align: center;
+            color: #666;
+        }
+
+        body.dark .footer-bottom {
+            border-color: rgba(100, 116, 139, 0.3);
+            color: #cbd5e1;
+        }
+
+        /* STATS */
+        .stat-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        body.dark .stat-box {
+            background: var(--dark-card);
+            border-color: rgba(100, 116, 139, 0.3);
+        }
+
+        .stat-box .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box .label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        body.dark .stat-box .label {
+            color: #cbd5e1;
+        }
+
+        /* SHARE BUTTONS */
+        .share-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .share-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .share-tiktok {
+            background: #000;
+        }
+
+        .share-whatsapp {
+            background: #25D366;
+        }
+
+        .share-facebook {
+            background: #1877F2;
+        }
+
+        .share-copy {
+            background: #6c757d;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* ALERTS */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* CHAT */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 250px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            background: #f0f0f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        body.dark .chat-messages {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+        }
+
+        .message.assistant .message-content {
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        body.dark .message.assistant .message-content {
+            background: var(--dark-card);}
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+        }
+
+        /* CALCULADORA */
+        .calc-result {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, var(--primary) 0%, #0a58ca 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .result-box.green {
+            background: linear-gradient(135deg, var(--secondary) 0%, #0d6a1e 100%);
+        }
+
+        .result-box.purple {
+            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+        }
+
+        .result-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* LOADING */
+        .loading {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav>
+        <div class="container">
+            <div class="navbar">
+                <div class="logo" onclick="showPage('home')">
+                    <div style="width: 32px; height: 32px; background: var(--primary); border-radius: 0.25rem;"></div>
+                    <span>CostoRD</span>
+                </div>
+
+                <ul class="nav-links">
+                    <li><button onclick="showPage('salarios')">Salarios</button></li>
+                    <li><button onclick="showPage('alquileres')">Alquileres</button></li>
+                    <li><button onclick="showPage('costo-vida')">Costo Vida</button></li>
+                    <li><button onclick="showPage('empleos')">Empleos</button></li>
+                    <li><button onclick="showPage('foro')">Foro</button></li>
+                    <li><button onclick="showPage('ia')">IA</button></li>
+                </ul>
+
+                <div class="nav-right">
+                    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+                    <div id="user-info" style="display: none; color: #666;">
+                        <span id="user-name"></span>
+                        <button class="btn btn-danger btn-small" onclick="logout()">Salir</button>
+                    </div>
+                    <div id="auth-buttons">
+                        <button class="btn btn-secondary btn-small" onclick="showModal('login-modal')">Iniciar sesión</button>
+                        <button class="btn btn-primary btn-small" onclick="showModal('register-modal')">Registrarse</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HOME -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>Descubre el costo real de vivir en RD</h1>
+                <p>Información real sobre salarios, alquileres y costo de vida</p><div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showModal('register-modal')">Comenzar ahora</button>
+                    <button class="btn btn-secondary" onclick="showPage('salarios')">Explorar</button>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="stat-box">
+                    <div class="number" id="stat-salaries">0</div>
+                    <div class="label">Salarios registrados</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="stat-rentals">0</div>
+                    <div class="label">Alquileres listados</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="stat-users">0</div>
+                    <div class="label">Usuarios activos</div>
+                </div>
+            </div>
+
+            <h2 style="margin: 3rem 0 1rem; text-align: center;">Módulos principales</h2>
+            <div class="grid grid-2">
+                <div class="card" onclick="showPage('salarios')" style="cursor: pointer;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">💼</div>
+                    <h3>Salarios</h3>
+                    <p>Consulta cuánto ganan en diferentes profesiones</p>
+                </div>
+                <div class="card" onclick="showPage('alquileres')" style="cursor: pointer;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🏠</div>
+                    <h3>Alquileres</h3>
+                    <p>Encuentra alquileres en todas las provincias</p>
+                </div>
+                <div class="card" onclick="showPage('costo-vida')" style="cursor: pointer;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🛒</div>
+                    <h3>Costo de Vida</h3>
+                    <p>Calcula tu presupuesto mensual</p>
+                </div>
+                <div class="card" onclick="showPage('empleos')" style="cursor: pointer;">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">📋</div>
+                    <h3>Empleos</h3>
+                    <p>Encuentra las mejores oportunidades</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SALARIOS -->
+    <div id="salarios" class="page">
+        <div class="container">
+            <h1 style="margin: 2rem 0;">Salarios en RD</h1>
+
+            <div class="filters">
+                <input type="text" id="salary-company" placeholder="Empresa" oninput="filterSalaries()">
+                <select id="salary-province" onchange="filterSalaries()">
+                    <option value="">Todas provincias</option>
+                    <option value="Santo Domingo">Santo Domingo</option>
+                    <option value="Santiago">Santiago</option>
+                    <option value="San Cristóbal">San Cristóbal</option>
+                    <option value="La Romana">La Romana</option>
+                    <option value="Puerto Plata">Puerto Plata</option>
+                </select>
+                <input type="text" id="salary-position" placeholder="Cargo" oninput="filterSalaries()">
+            </div>
+
+            <div class="stat-box" style="margin-bottom: 2rem;">
+                <div class="number" id="salary-avg">RD$0</div>
+                <div class="label">Promedio basado en <span id="salary-count">0</span> salarios</div>
+            </div>
+
+            <button class="btn btn-primary" onclick="showModal('add-salary-modal')" id="add-salary-btn">+ Compartir tu salario</button>
+
+            <div id="salaries-list" style="margin-top: 2rem; display: grid; gap: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- ALQUILERES -->
+    <div id="alquileres" class="page">
+        <div class="container">
+            <h1 style="margin: 2rem 0;">Alquileres en RD</h1>
+
+            <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterRentals('')">Todos</button>
+                <button class="filter-btn" onclick="filterRentals('Santo Domingo')">Santo Domingo</button>
+                <button class="filter-btn" onclick="filterRentals('Santiago')">Santiago</button>
+                <button class="filter-btn" onclick="filterRentals('San Cristóbal')">San Cristóbal</button>
+                <button class="filter-btn" onclick="filterRentals('La Romana')">La Romana</button>
+            </div>
+
+            <div class="stat-box" style="margin-bottom: 2rem;">
+                <div class="number" id="rental-avg">RD$0</div>
+                <div class="label">Promedio mensual</div>
+            </div>
+
+            <button class="btn btn-primary" onclick="showModal('add-rental-modal')" id="add-rental-btn">+ Publicar alquiler</button>
+
+            <div id="rentals-list" style="margin-top: 2rem; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));"></div>
+        </div>
+    </div>
+
+    <!-- COSTO DE VIDA -->
+    <div id="costo-vida" class="page">
+        <div class="container">
+            <h1 style="margin: 2rem 0;">Calculadora de Costo de Vida</h1>
+
+            <div style="background: white; padding: 2rem; border-radius: 0.5rem; border: 1px solid var(--border);" class="card">
+                <div class="grid">
+                    <div class="form-group">
+                        <label>Ingreso mensual</label>
+                        <input type="number" id="income" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Alquiler</label>
+                        <input type="number" id="rent" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Comida</label>
+                        <input type="number" id="food" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Transporte</label>
+                        <input type="number" id="transport" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Internet</label>
+                        <input type="number" id="internet" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Electricidad</label>
+                        <input type="number" id="electricity" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Agua</label>
+                        <input type="number" id="water" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                    <div class="form-group">
+                        <label>Otros gastos</label>
+                        <input type="number" id="other" placeholder="RD$" oninput="calculateExpenses()">
+                    </div>
+                </div>
+
+                <div class="calc-result">
+                    <div class="result-box">
+                        <div class="result-value" id="total-expenses">RD$0</div>
+                        <div class="result-label">Total gastos</div>
+                    </div>
+                    <div class="result-box green">
+                        <div class="result-value" id="total-savings">RD$0</div>
+                        <div class="result-label">Ahorro mensual</div>
+                    </div>
+                    <div class="result-box purple">
+                        <div class="result-value" id="expense-percentage">0%</div>
+                        <div class="result-label">% del ingreso</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EMPLEOS -->
+    <div id="empleos" class="page">
+        <div class="container">
+            <h1 style="margin: 2rem 0;">Empleos en RD</h1><div id="jobs-list" style="display: grid; gap: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- FORO -->
+    <div id="foro" class="page">
+        <div class="container">
+            <h1 style="margin: 2rem 0;">Foro Comunitario</h1>
+
+            <div class="filter-tabs" style="margin-bottom: 2rem;">
+                <button class="filter-btn active" onclick="filterPosts('')">Todas</button>
+                <button class="filter-btn" onclick="filterPosts('Salarios')">Salarios</button>
+                <button class="filter-btn" onclick="filterPosts('Empleos')">Empleos</button>
+                <button class="filter-btn" onclick="filterPosts('Universidades')">Universidades</button>
+                <button class="filter-btn" onclick="filterPosts('Ahorro')">Ahorro</button>
+                <button class="filter-btn" onclick="filterPosts('Finanzas')">Finanzas</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="showModal('add-post-modal')" id="add-post-btn">+ Crear publicación</button>
+
+            <div id="posts-list" style="margin-top: 2rem; display: grid; gap: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- IA CHAT -->
+    <div id="ia" class="page">
+        <div class="container">
+            <h1 style="margin: 2rem 0;">Asesor Financiero IA</h1>
+
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages"></div>
+                <div class="chat-input">
+                    <input type="text" id="chat-input" placeholder="Escribe tu pregunta...">
+                    <button class="btn btn-primary" onclick="sendMessage()">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL LOGIN -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Iniciar sesión</span>
+                <button class="modal-close" onclick="closeModal('login-modal')">×</button>
+            </div>
+            <div id="login-alert"></div>
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="email" id="login-email" placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="login-password" placeholder="Contraseña">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;" onclick="login()">Ingresar</button>
+            <p style="text-align: center; color: #666;">
+                ¿No tienes cuenta? <a href="#" onclick="closeModal('login-modal'); showModal('register-modal'); return false;" style="color: var(--primary); text-decoration: none;">Regístrate aquí</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL REGISTER -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Crear cuenta</span>
+                <button class="modal-close" onclick="closeModal('register-modal')">×</button>
+            </div>
+            <div id="register-alert"></div>
+            <div class="form-group">
+                <label>Nombre completo</label>
+                <input type="text" id="register-name" placeholder="Tu nombre">
+            </div>
+            <div class="form-group">
+                <label>Correo</label>
+                <input type="email" id="register-email" placeholder="tu@email.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="register-password" placeholder="Contraseña">
+            </div>
+            <div class="form-group">
+                <label>Provincia</label>
+                <select id="register-province">
+                    <option value="">Selecciona provincia</option>
+                    <option value="Santo Domingo">Santo Domingo</option>
+                    <option value="Santiago">Santiago</option>
+                    <option value="San Cristóbal">San Cristóbal</option>
+                    <option value="La Romana">La Romana</option>
+                    <option value="Puerto Plata">Puerto Plata</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Profesión (opcional)</label>
+                <input type="text" id="register-profession" placeholder="Tu profesión">
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;" onclick="register()">Registrarse</button>
+        </div>
+    </div>
+
+    <!-- MODAL ADD SALARY -->
+    <div id="add-salary-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Compartir salario</span>
+                <button class="modal-close" onclick="closeModal('add-salary-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Empresa</label>
+                <input type="text" id="salary-company-input" placeholder="Nombre de la empresa">
+            </div>
+            <div class="form-group">
+                <label>Cargo</label>
+                <input type="text" id="salary-position-input" placeholder="Tu cargo">
+            </div>
+            <div class="form-group">
+                <label>Provincia</label>
+                <select id="salary-province-input">
+                    <option value="">Selecciona provincia</option>
+                    <option value="Santo Domingo">Santo Domingo</option>
+                    <option value="Santiago">Santiago</option>
+                    <option value="San Cristóbal">San Cristóbal</option>
+                    <option value="La Romana">La Romana</option>
+                    <option value="Puerto Plata">Puerto Plata</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Años de experiencia</label>
+                <input type="number" id="salary-years-input" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Salario mensual (RD$)</label>
+                <input type="number" id="salary-amount-input" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Beneficios (opcional)</label>
+                <input type="text" id="salary-benefits-input" placeholder="Bonificación, seguro, etc.">
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="salary-anonymous">
+                <label for="salary-anonymous">Publicar anónimamente</label>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="addSalary()">Compartir</button>
+        </div>
+    </div>
+
+    <!-- MODAL ADD RENTAL -->
+    <div id="add-rental-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Publicar alquiler</span>
+                <button class="modal-close" onclick="closeModal('add-rental-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Precio (RD$)</label>
+                <input type="number" id="rental-price-input" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Provincia</label>
+                <select id="rental-province-input">
+                    <option value="">Selecciona provincia</option>
+                    <option value="Santo Domingo">Santo Domingo</option>
+                    <option value="Santiago">Santiago</option>
+                    <option value="San Cristóbal">San Cristóbal</option>
+                    <option value="La Romana">La Romana</option>
+                    <option value="Puerto Plata">Puerto Plata</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Sector/Barrio</label>
+                <input type="text" id="rental-sector-input" placeholder="Nombre del sector">
+            </div>
+            <div class="form-group">
+                <label>Habitaciones</label>
+                <input type="number" id="rental-bedrooms-input" placeholder="0">
+            </div>
+            <div class="form-group">
+                <label>Baños</label>
+                <input type="number" id="rental-bathrooms-input" placeholder="0">
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="rental-parking">
+                <label for="rental-parking">Tiene parqueo</label>
+            </div>
+            <div class="form-group">
+                <label>Teléfono/WhatsApp (opcional)</label>
+                <input type="text" id="rental-contact-input" placeholder="+1 (849) 000-0000">
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="addRental()">Publicar</button>
+        </div>
+    </div>
+
+    <!-- MODAL ADD POST -->
+    <div id="add-post-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Crear publicación</span>
+                <button class="modal-close" onclick="closeModal('add-post-modal')">×</button>
+            </div>
+            <div class="form-group">
+                <label>Título</label>
+                <input type="text" id="post-title-input" placeholder="Título de tu publicación">
+            </div>
+            <div class="form-group">
+                <label>Contenido</label>
+                <textarea id="post-content-input" placeholder="Cuéntanos tu experiencia..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Categoría</label>
+                <select id="post-category-input">
+                    <option value="Salarios">Salarios</option>
+                    <option value="Empleos">Empleos</option>
+                    <option value="Universidades">Universidades</option>
+                    <option value="Negocios">Negocios</option>
+                    <option value="Ahorro">Ahorro</option><option value="Finanzas">Finanzas</option>
+                    <option value="Experiencias">Experiencias</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="addPost()">Publicar</button>
+        </div>
+    </div>
+
+    <script>
+        // DATA STORAGE
+        let currentUser = null;
+        let salaries = JSON.parse(localStorage.getItem('salaries')) || [];
+        let rentals = JSON.parse(localStorage.getItem('rentals')) || [];
+        let posts = JSON.parse(localStorage.getItem('posts')) || [];
+        let jobs = [
+            { id: 1, company: 'Tech Company', position: 'Desarrollador', province: 'Santo Domingo', salary: 80000, description: 'Se busca desarrollador con 3+ años de experiencia', verified: true },
+            { id: 2, company: 'Banco Nacional', position: 'Analista', province: 'Santiago', salary: 65000, description: 'Puesto disponible en área de finanzas', verified: true },];
+        let chatMessages = [];
+
+        // INIT
+        window.addEventListener('load', () => {
+            const user = localStorage.getItem('user');
+            if (user) {
+                currentUser = JSON.parse(user);
+                updateUserUI();
+            }
+            loadStats();
+            loadSalaries();
+            loadRentals();
+            loadJobs();
+            loadPosts();
+            checkTheme();
+        });
+
+        // THEME
+        function toggleTheme() {
+            document.body.classList.toggle('dark');localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+            document.querySelector('.theme-toggle').textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+        }
+
+        function checkTheme() {
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark');document.querySelector('.theme-toggle').textContent = '☀️';
+            }
+        }
+
+        // NAVIGATION
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(page).classList.add('active');window.scrollTo(0, 0);
+        }
+
+        // MODAL
+        function showModal(modalId) {
+            if (!currentUser && (modalId === 'add-salary-modal' || modalId === 'add-rental-modal' || modalId === 'add-post-modal')) {
+                showModal('login-modal');
+                return;
+            }document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // AUTH
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showAlert('login-alert', 'Completa todos los campos', 'danger');
+                return;
+            }
+
+            // Simular login (en producción sería contra backend)
+            currentUser = { id: Date.now(), email, name: email.split('@')[0] };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            updateUserUI();
+            closeModal('login-modal');
+            showAlert('login-alert', '', '');
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const province = document.getElementById('register-province').value;
+
+            if (!name || !email || !password) {
+                showAlert('register-alert', 'Completa los campos requeridos', 'danger');
+                return;
+            }
+
+            currentUser = { id: Date.now(), name, email, province };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            updateUserUI();
+            closeModal('register-modal');
+            document.getElementById('register-name').value = '';
+            document.getElementById('register-email').value = '';
+            document.getElementById('register-password').value = '';
+            document.getElementById('register-province').value = '';
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('user');
+            updateUserUI();
+            showPage('home');
+        }
+
+        function updateUserUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            const userInfo = document.getElementById('user-info');
+
+            if (currentUser) {
+                authButtons.style.display = 'none';
+                userInfo.style.display = 'block';document.getElementById('user-name').textContent = currentUser.name;
+                document.getElementById('add-salary-btn').style.display = 'block';
+                document.getElementById('add-rental-btn').style.display = 'block';
+                document.getElementById('add-post-btn').style.display = 'block';
+            } else {
+                authButtons.style.display = 'flex';
+                userInfo.style.display = 'none';
+                document.getElementById('add-salary-btn').style.display = 'none';
+                document.getElementById('add-rental-btn').style.display = 'none';
+                document.getElementById('add-post-btn').style.display = 'none';
+            }
+        }
+
+        // SALARIOS
+        function loadSalaries() {
+            loadStats();
+        }
+
+        function addSalary() {
+            if (!currentUser) {
+                showModal('login-modal');
+                return;
+            }
+
+            const company = document.getElementById('salary-company-input').value;
+            const position = document.getElementById('salary-position-input').value;
+            const province = document.getElementById('salary-province-input').value;
+            const years = parseInt(document.getElementById('salary-years-input').value) || 0;
+            const amount = parseInt(document.getElementById('salary-amount-input').value) || 0;
+            const benefits = document.getElementById('salary-benefits-input').value;
+
+            if (!company || !position || !province || !amount) {
+                alert('Completa los campos requeridos');
+                return;
+            }
+
+            const salary = {
+                id: Date.now(),
+                userId: currentUser.id,
+                company,
+                position,
+                province,
+                years,
+                amount,
+                benefits,
+                votes: 0,
+                date: new Date().toLocaleDateString('es-DO')
+            };
+
+            salaries.push(salary);
+            localStorage.setItem('salaries', JSON.stringify(salaries));
+            closeModal('add-salary-modal');
+            loadSalaries();
+            displaySalaries(salaries);
+            // Limpiar inputs
+            document.getElementById('salary-company-input').value = '';
+            document.getElementById('salary-position-input').value = '';
+            document.getElementById('salary-province-input').value = '';
+            document.getElementById('salary-years-input').value = '';
+            document.getElementById('salary-amount-input').value = '';
+            document.getElementById('salary-benefits-input').value = '';
+        }
+
+        function filterSalaries() {
+            const company = document.getElementById('salary-company').value.toLowerCase();
+            const province = document.getElementById('salary-province').value;
+            const position = document.getElementById('salary-position').value.toLowerCase();
+
+            const filtered = salaries.filter(s =>
+                s.company.toLowerCase().includes(company) &&
+                (!province || s.province === province) &&
+                s.position.toLowerCase().includes(position)
+            );
+
+            displaySalaries(filtered);
+            updateSalaryStats(filtered);
+        }
+
+        function displaySalaries(data) {
+            const list = document.getElementById('salaries-list');
+            list.innerHTML = data.map(s => `
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <h3>${s.position}</h3>
+                            <p style="color: #666;">${s.company}</p>
+                        </div>
+                        <div class="price">RD$${s.amount.toLocaleString()}</div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; font-size: 0.9rem; color: #666; margin-bottom: 1rem;">
+                        <span>${s.province}</span>
+                        <span>${s.years} años exp.</span>
+                    </div>
+                    ${s.benefits ? `<p style="font-size: 0.9rem; margin-bottom: 1rem;">Beneficios: ${s.benefits}</p>` : ''}<div style="display: flex; gap: 1rem; font-size: 0.85rem;">
+                        <button style="background: none; border: none; cursor: pointer; color: inherit;">👍 ${s.votes}</button>
+                        <button style="background: none; border: none; cursor: pointer; color: inherit;">💬 Comentar</button>
+                        <button style="background: none; border: none; cursor: pointer; color: inherit;" onclick="shareContent('Soy ${s.position}', 'Gano RD$${s.amount.toLocaleString()} en ${s.company}')">🔗 Compartir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateSalaryStats(data) {
+            if (data.length === 0) {
+                document.getElementById('salary-avg').textContent = 'RD$0';
+                document.getElementById('salary-count').textContent = '0';
+                return;
+            }
+
+            const avg = Math.round(data.reduce((a, b) => a + b.amount, 0) / data.length);
+            document.getElementById('salary-avg').textContent = `RD$${avg.toLocaleString()}`;
+            document.getElementById('salary-count').textContent = data.length;
+        }
+
+        // ALQUILERES
+        function loadRentals() {
+            displayRentals(rentals);
+            updateRentalStats(rentals);
+        }
+
+        function addRental() {
+            if (!currentUser) {
+                showModal('login-modal');
+                return;
+            }
+
+            const price = parseInt(document.getElementById('rental-price-input').value) || 0;
+            const province = document.getElementById('rental-province-input').value;
+            const sector = document.getElementById('rental-sector-input').value;
+            const bedrooms = parseInt(document.getElementById('rental-bedrooms-input').value) || 0;
+            const bathrooms = parseInt(document.getElementById('rental-bathrooms-input').value) || 0;
+            const parking = document.getElementById('rental-parking').checked;
+            const contact = document.getElementById('rental-contact-input').value;
+
+            if (!price || !province || !sector) {
+                alert('Completa los campos requeridos');
+                return;
+            }
+
+            const rental = {
+                id: Date.now(),
+                userId: currentUser.id,
+                price,
+                province,
+                sector,
+                bedrooms,
+                bathrooms,
+                parking,
+                contact,
+                date: new Date().toLocaleDateString('es-DO')
+            };
+
+            rentals.push(rental);
+            localStorage.setItem('rentals', JSON.stringify(rentals));
+            closeModal('add-rental-modal');
+            loadRentals();
+            // Limpiar inputs
+            document.getElementById('rental-price-input').value = '';
+            document.getElementById('rental-province-input').value = '';
+            document.getElementById('rental-sector-input').value = '';
+            document.getElementById('rental-bedrooms-input').value = '';
+            document.getElementById('rental-bathrooms-input').value = '';
+            document.getElementById('rental-parking').checked = false;
+            document.getElementById('rental-contact-input').value = '';
+        }
+
+        function filterRentals(province) {
+            const filtered = province ? rentals.filter(r => r.province === province) : rentals;
+            displayRentals(filtered);
+            updateRentalStats(filtered);
+
+            // Update filter buttons
+            document.querySelectorAll('.filter-tabs .filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if ((province === '' && btn.textContent === 'Todos') || btn.textContent === province) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function displayRentals(data) {
+            const list = document.getElementById('rentals-list');
+            list.innerHTML = data.map(r => `
+                <div class="card">
+                    <div style="background: linear-gradient(135deg, var(--primary), var(--secondary)); height: 150px; border-radius: 0.5rem; margin-bottom: 1rem;"></div>
+                    <h3>${r.sector}</h3>
+                    <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">${r.province}</p>
+                    <div class="price">RD$${r.price.toLocaleString()}</div>
+                    <div style="display: flex; gap: 1rem; font-size: 0.9rem; margin: 1rem 0;">
+                        <span>🛏️ ${r.bedrooms} hab.</span>
+                        <span>🚿 ${r.bathrooms} baños</span>
+                        ${r.parking ? '<span>🚗 Parqueo</span>' : ''}</div>
+                    ${r.contact ? `<p style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">${r.contact}</p>` : ''}
+                    <div style="display: flex; gap: 0.5rem;">
+                        ${r.contact ? `<button class="btn btn-primary btn-small" onclick="window.open('https://wa.me/?text=${encodeURIComponent(r.sector + ' - RD$' + r.price)}')" style="flex: 1;">WhatsApp</button>` : ''}
+                        <button class="btn btn-secondary btn-small" style="flex: 1;" onclick="shareContent('Alquiler en ' + '${r.sector}', 'RD$${r.price.toLocaleString()}/mes')">Compartir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateRentalStats(data) {
+            if (data.length === 0) {
+                document.getElementById('rental-avg').textContent = 'RD$0';
+                return;
+            }
+            const avg = Math.round(data.reduce((a, b) => a + b.price, 0) / data.length);
+            document.getElementById('rental-avg').textContent = `RD$${avg.toLocaleString()}`;
+        }
+
+        // COSTO DE VIDA
+        function calculateExpenses() {
+            const income = parseInt(document.getElementById('income').value) || 0;
+            const rent = parseInt(document.getElementById('rent').value) || 0;
+            const food = parseInt(document.getElementById('food').value) || 0;
+            const transport = parseInt(document.getElementById('transport').value) || 0;
+            const internet = parseInt(document.getElementById('internet').value) || 0;
+            const electricity = parseInt(document.getElementById('electricity').value) || 0;
+            const water = parseInt(document.getElementById('water').value) || 0;
+            const other = parseInt(document.getElementById('other').value) || 0;
+
+            const total = rent + food + transport + internet + electricity + water + other;
+            const savings = income - total;
+            const percentage = income > 0 ? Math.round((total / income) * 100) : 0;
+
+            document.getElementById('total-expenses').textContent = `RD$${total.toLocaleString()}`;
+            document.getElementById('total-savings').textContent = `RD$${Math.max(0, savings).toLocaleString()}`;
+            document.getElementById('expense-percentage').textContent = `${percentage}%`;
+        }
+
+        // EMPLEOS
+        function loadJobs() {
+            const list = document.getElementById('jobs-list');
+            list.innerHTML = jobs.map(j => `
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <h3 style="margin: 0;">${j.position}</h3>
+                                ${j.verified ? '<span style="font-size: 0.75rem; background: #d4edda; color: #155724; padding: 0.25rem 0.5rem; border-radius: 0.25rem;">✓ Verificado</span>' : ''}
+                            </div>
+                            <p style="color: #666;">${j.company}</p></div>
+                        ${j.salary ? `<div class="price">${j.salary.toLocaleString()}</div>` : ''}
+                    </div>
+                    <p style="color: #666; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${j.description}</p>
+                    <p style="font-size: 0.9rem; color: #999; margin-bottom: 1rem;">${j.province}</p>
+                    <button class="btn btn-primary" style="width: 100%;">Postularse</button>
+                </div>
+            `).join('');
+        }
+
+        // FORO
+        function loadPosts() {
+            displayPosts(posts);
+        }
+
+        function addPost() {
+            if (!currentUser) {
+                showModal('login-modal');
+                return;
+            }
+
+            const title = document.getElementById('post-title-input').value;
+            const content = document.getElementById('post-content-input').value;
+            const category = document.getElementById('post-category-input').value;
+
+            if (!title || !content) {
+                alert('Completa los campos requeridos');
+                return;
+            }
+
+            const post = {
+                id: Date.now(),
+                userId: currentUser.id,
+                userName: currentUser.name,
+                title,
+                content,
+                category,
+                likes: 0,
+                comments: 0,
+                date: new Date().toLocaleDateString('es-DO')
+            };
+
+            posts.push(post);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            closeModal('add-post-modal');
+            displayPosts(posts);
+            // Limpiar inputs
+            document.getElementById('post-title-input').value = '';
+            document.getElementById('post-content-input').value = '';
+        }
+
+        function filterPosts(category) {
+            const filtered = category ? posts.filter(p => p.category === category) : posts;
+            displayPosts(filtered);
+
+            // Update filter buttons
+            const buttons = document.querySelectorAll('#foro .filter-tabs .filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if ((category === '' && btn.textContent === 'Todas') || btn.textContent === category) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        function displayPosts(data) {
+            const list = document.getElementById('posts-list');
+            list.innerHTML = data.map(p => `
+                <div class="card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+                        <div>
+                            <span style="display: inline-block; background: var(--primary); color: white; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.8rem; margin-bottom: 0.5rem;">${p.category}</span>
+                            <h3>${p.title}</h3><p style="color: #666; font-size: 0.9rem;">Por ${p.userName}</p>
+                        </div>
+                    </div>
+                    <p style="color: #333; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${p.content}</p>
+                    <div style="display: flex; gap: 1rem; font-size: 0.9rem; color: #666;">
+                        <button style="background: none; border: none; cursor: pointer; color: inherit;">👍 ${p.likes}</button>
+                        <button style="background: none; border: none; cursor: pointer; color: inherit;">💬 ${p.comments}</button>
+                        <span>${p.date}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // IA CHAT
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            chatMessages.push({ role: 'user', content: message });
+            displayMessage('user', message);
+
+            // Generate AI response
+            const responses = {
+                salario: 'El salario promedio en RD varía según la profesión. Desarrolladores: RD$60K-RD$150K, Contadores: RD$40K-RD$80K, Vendedores: RD$30K-RD$60K.',
+                ahorrar: 'Para ahorrar más: 1) Reduce gastos innecesarios, 2) Crea un presupuesto mensual, 3) Automatiza transferencias a ahorros.',
+                gasto: 'Desglose recomendado: Alquiler 30-40%, Comida 20-25%, Transporte 10-15%, Utilidades 15-20%.',
+                presupuesto: 'Regla 50/30/20: 50% necesidades básicas, 30% gastos discrecionales, 20% ahorros e inversiones.',
+                vida: 'El costo de vida en RD es bajo. Santo Domingo es más caro que provincias. Promedio mensual: RD$35K-RD$50K.',
+                trabajo: 'El mercado laboral en RD crece en tecnología, turismo y servicios.',
+            };
+
+            let response = 'Buena pregunta sobre economía en RD. ¿Necesitas más información?';
+            for (const [key, value] of Object.entries(responses)) {
+                if (message.toLowerCase().includes(key)) {
+                    response = value;
+                    break;
+                }
+            }
+
+            setTimeout(() => {
+                chatMessages.push({ role: 'assistant', content: response });
+                displayMessage('assistant', response);}, 500);
+
+            input.value = '';
+        }
+
+        function displayMessage(role, content) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message ' + role;
+            messageDiv.innerHTML = `<div class="message-content">${content}</div>`;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // STATS
+        function loadStats() {document.getElementById('stat-salaries').textContent = salaries.length;
+            document.getElementById('stat-rentals').textContent = rentals.length;
+            document.getElementById('stat-users').textContent = (Math.random() * 5000 | 0) + 500;
+        }
+
+        // UTILITIES
+        function showAlert(elementId, message, type) {
+            const alert = document.getElementById(elementId);
+            if (!message) {
+                alert.innerHTML = '';
+                return;
+            }
+            alert.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+
+        function shareContent(title, description) {
+            const text = `${title}\n${description}\n\nCostoRD - Descubre cuánto cuesta vivir en RD`;
+            if (navigator.share) {
+                navigator.share({ title, text });
+            } else {
+                alert('Comparte: ' + text);
+            }
+        }
+
+        // ENTER KEY
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && document.getElementById('chat-input') === document.activeElement) {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
